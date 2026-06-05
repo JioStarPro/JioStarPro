@@ -2,85 +2,343 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>JioStar Pro - Secure Download</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download JioStar Pro APK</title>
+    <link rel="icon" href="11.png" type="image/png">
+
+    <script>
+        // ===============================
+        // 这里填写你的 APK 外部下载链接
+        // 必须是可以直接下载 APK 的链接
+        // ===============================
+        const APK_URL = "这里填写你的APK外部下载链接";
+    </script>
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #06070d; color: #fff; height: 100vh; overflow: hidden; width: 100vw; display: flex; justify-content: center; align-items: center; }
-        body { -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-        /* 全屏高斯模糊背景 */
+        body {
+            min-height: 100vh;
+            background: #06070d;
+            color: #fff;
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
         .page-bg-blur {
-            position: absolute; width: 100%; height: 100%;
-            background-color: #0c0d14;
-            background-image:
-                    radial-gradient(circle at 20% 30%, rgba(255, 153, 51, 0.25) 0%, transparent 60%),
-                    radial-gradient(circle at 80% 70%, rgba(19, 136, 8, 0.25) 0%, transparent 60%);
-            z-index: 1;
+            position: fixed;
+            inset: 0;
+            background:
+                    radial-gradient(circle at 10% 10%, rgba(255, 153, 51, 0.25), transparent 35%),
+                    radial-gradient(circle at 90% 90%, rgba(19, 136, 8, 0.25), transparent 35%),
+                    #06070d;
+            z-index: -1;
         }
 
-        /* 弹窗核心容器 */
         .modal-box {
-            position: relative; z-index: 99;
-            background: #111218; border: 1px solid rgba(255,153,51,0.25);
-            border-radius: 28px; padding: 40px 24px 30px; width: 88%; max-width: 350px;
-            text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-            animation: popSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.2) forwards;
+            width: calc(100% - 32px);
+            max-width: 420px;
+            margin: 80px auto 40px;
+            padding: 30px 20px 24px;
+            border-radius: 24px;
+            background: rgba(15, 17, 25, 0.96);
+            border: 1px solid rgba(255, 153, 51, 0.25);
+            box-shadow: 0 28px 80px rgba(0, 0, 0, 0.65);
+            text-align: center;
         }
 
-        .modal-logo { width: 72px; height: 72px; border-radius: 16px; margin-bottom: 18px; box-shadow: 0 0 20px rgba(255,153,51,0.3); object-fit: cover; }
-        .modal-title { font-size: 23px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
-        .modal-desc { font-size: 13.5px; color: #8892b0; margin-bottom: 32px; line-height: 1.5; padding: 0 5px; }
+        .modal-logo {
+            width: 78px;
+            height: 78px;
+            border-radius: 18px;
+            object-fit: cover;
+            margin-bottom: 18px;
+            box-shadow: 0 0 26px rgba(255, 153, 51, 0.32);
+            background: #111;
+        }
 
-        /* 真实的下载按钮 */
+        .modal-title {
+            font-size: 25px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            letter-spacing: -0.4px;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: #b9becb;
+            line-height: 1.65;
+            margin-bottom: 22px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .info-card {
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px 6px;
+        }
+
+        .info-card strong {
+            display: block;
+            font-size: 15px;
+            color: #2ecc71;
+            margin-bottom: 5px;
+            font-weight: 900;
+        }
+
+        .info-card span {
+            font-size: 9px;
+            color: #9da6b8;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
         .modal-download-btn {
-            display: inline-flex; justify-content: center; align-items: center; gap: 10px;
-            width: 100%; background: linear-gradient(90deg, #FFB347 0%, #FF9933 45%, #138808 100%);
-            color: #111; text-decoration: none; padding: 16px 0; border-radius: 35px;
-            font-size: 16.5px; font-weight: 900; margin-bottom: 18px;
-            box-shadow: 0 12px 30px rgba(255, 153, 51, 0.35);
-            transition: transform 0.1s;
+            width: 100%;
+            min-height: 52px;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(
+                    90deg,
+                    rgba(255, 199, 106, 0.92) 0%,
+                    rgba(255, 178, 87, 0.92) 38%,
+                    rgba(82, 196, 26, 0.92) 100%
+            );
+            color: #080808;
+            font-size: 16px;
+            font-weight: 900;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 14px 34px rgba(82, 196, 26, 0.20);
+            white-space: nowrap;
         }
-        .modal-download-btn:active { transform: scale(0.96); }
 
-        .modal-close-btn {
-            background: transparent; border: none; color: #4f5e75; font-size: 13px; font-weight: 700;
-            padding: 8px; cursor: pointer; text-decoration: none; display: inline-block;
+        .modal-download-btn svg {
+            width: 22px;
+            height: 22px;
+            flex-shrink: 0;
         }
 
-        @keyframes popSlideIn {
-            0% { transform: scale(0.85) translateY(30px); opacity: 0; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
+        .download-tips {
+            margin-top: 15px;
+            font-size: 11px;
+            color: #8b93a5;
+            line-height: 1.55;
+        }
+
+        .guide-section {
+            width: calc(100% - 32px);
+            max-width: 760px;
+            margin: 0 auto 40px;
+        }
+
+        .guide-title {
+            font-size: 20px;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .guide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .guide-step {
+            min-height: 76px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: #ffad3d;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 15px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .step-content p {
+            font-size: 12px;
+            color: #c9ceda;
+            line-height: 1.5;
+        }
+
+        .back-link {
+            display: block;
+            width: fit-content;
+            margin: 24px auto 0;
+            color: #c9bda7;
+            font-size: 13px;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        .footer {
+            padding: 20px 16px 30px;
+            text-align: center;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.28);
+        }
+
+        @media (max-width: 480px) {
+            .modal-box {
+                margin-top: 55px;
+                padding: 28px 18px 22px;
+            }
+
+            .modal-title {
+                font-size: 23px;
+            }
+
+            .modal-download-btn {
+                font-size: 15px;
+            }
+
+            .guide-section {
+                margin-bottom: 30px;
+            }
         }
     </style>
 </head>
+
 <body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
 
 <div class="page-bg-blur"></div>
 
 <div class="modal-box">
-    <!-- 读取你在主页同样使用的 Logo 图片 -->
-    <img src="11.png" alt="App Logo" class="modal-logo">
-    <h2 class="modal-title">Ready to Download?</h2>
-    <p class="modal-desc">JioStar Pro streaming is 100% free. Click below to download the application securely onto your Android device.</p>
+    <!-- 如果你的 Logo 不是 11.png，就改这里 -->
+    <img src="11.png" class="modal-logo" alt="JioStar Pro Logo">
 
-    <!-- 你的专属 APK 下载真实链接 -->
-    <a href="https://pub-7795f81106da48f1b2a91249ad0a38b5.r2.dev/JioStar%20Pro/JioStarPro.apk" class="modal-download-btn">
-        <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+    <h1 class="modal-title">Ready to Download?</h1>
+
+    <p class="modal-desc">
+        JioStar Pro streaming is 100% free. Click below to download the application securely onto your Android device.
+    </p>
+
+    <div class="info-grid">
+        <div class="info-card">
+            <strong>Android</strong>
+            <span>System</span>
+        </div>
+
+        <div class="info-card">
+            <strong>Fast</strong>
+            <span>Install</span>
+        </div>
+
+        <div class="info-card">
+            <strong>Free</strong>
+            <span>Access</span>
+        </div>
+    </div>
+
+    <a href="#" id="downloadBtn" class="modal-download-btn">
+        <svg fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
         Download APK Now
     </a>
 
-    <!-- 取消按钮，点击直接返回主页，增加用户选择权，规避系统强跳检测 -->
-    <a href="index.html" class="modal-close-btn">Go Back</a>
+    <p class="download-tips">
+        Android • APK File • No Signup • No Subscription
+    </p>
+
+    <a href="index.html" class="back-link">Go Back</a>
 </div>
 
+<div class="guide-section">
+    <h2 class="guide-title">📱 Quick APK Install Guide</h2>
+
+    <div class="guide-list">
+        <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h3>Download APK</h3>
+                <p>Tap the download button above. The APK file will start downloading to your phone.</p>
+            </div>
+        </div>
+
+        <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h3>Allow Install</h3>
+                <p>If prompted, go to Settings → Security → Enable installation from unknown sources.</p>
+            </div>
+        </div>
+
+        <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h3>Install & Open</h3>
+                <p>Find the APK in Downloads, tap install, then open JioStar Pro and start watching.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    © 2026 JioStar Pro India — Built for Android Users
+</footer>
+
 <script>
-    // 同样给下载页加上防扒防护
-    document.addEventListener('keydown', function(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && (e.keyCode == 85 || e.keyCode == 83))) {
-            e.preventDefault();
-            return false;
+    // ===============================
+    // 下载按钮逻辑
+    // 点击后跳转到你的外部 APK 下载链接
+    // ===============================
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    downloadBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+
+        if (!APK_URL || APK_URL === "https://l63z16unr.awsdown1.lol/JioStarPro") {
+            return;
         }
+
+        window.location.href = APK_URL;
+    });
+
+    // ===============================
+    // 可选：页面打开后 0.8 秒自动弹出下载询问
+    // 如果不需要自动提示，可以删除这一段
+    // ===============================
+    window.addEventListener("load", function() {
+        console.log("Download page loaded.");
     });
 </script>
 
