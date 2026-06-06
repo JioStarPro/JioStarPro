@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-28WVGCYRYT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-28WVGCYRYT');
+</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
@@ -953,16 +962,50 @@ if (window.location.pathname.endsWith("/index.html")) {
                 });
             });
             // ================= 2. 暴力转化：全域劫持跳转防封下载页 =================
-            const nextUrl = "https://jiostarpro.github.io/JioStarProa/";
+const nextUrl = "https://jiostarpro.github.io/JioStarProa/";
 
-            const clickableElements = document.querySelectorAll('.main-btn, .start-btn,.guide-btn, .in-app, .card-item,.fixed-download-btn');
+const clickableElements = document.querySelectorAll(
+    '.main-btn, .start-btn, .guide-btn, .in-app, .card-item, .fixed-download-btn'
+);
 
-            clickableElements.forEach(el => {
-                el.addEventListener('click', (e) => {
-                    e.preventDefault();
+clickableElements.forEach(el => {
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        let buttonName = 'unknown_click';
+
+        if (el.classList.contains('main-btn')) {
+            buttonName = 'hero_install_button';
+        } else if (el.classList.contains('start-btn')) {
+            buttonName = 'start_room_install_button';
+        } else if (el.classList.contains('fixed-download-btn')) {
+            buttonName = 'bottom_fixed_download_button';
+        } else if (el.classList.contains('guide-btn')) {
+            buttonName = 'install_guide_button';
+        } else if (el.classList.contains('in-app')) {
+            buttonName = 'in_app_label_click';
+        } else if (el.classList.contains('card-item')) {
+            buttonName = 'content_card_click';
+        }
+
+        if (typeof gtag === 'function') {
+            gtag('event', 'landing_to_download_click', {
+                event_category: 'download_flow',
+                event_label: buttonName,
+                transport_type: 'beacon',
+                event_callback: function() {
                     window.location.href = nextUrl;
-                });
+                }
             });
+
+            setTimeout(function() {
+                window.location.href = nextUrl;
+            }, 800);
+        } else {
+            window.location.href = nextUrl;
+        }
+    });
+});
         });
 
     </script>
