@@ -60,9 +60,20 @@ src="https://www.facebook.com/tr?id=1023268086807125&ev=PageView&noscript=1"
             padding: 0 20px; z-index: 9999;
         }
         .header::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, #FF9933 0%, #FF9933 33%, #FFFFFF 33%, #FFFFFF 66%, #138808 66%, #138808 100%);
-        }
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        #e70011 0%,
+        #e70011 50%,
+        #ffffff 50%,
+        #ffffff 100%
+    );
+}
         .logo-wrapper { display: flex; align-items: center; gap: 10px; }
 
         /* 修改了 Logo 样式，专门适配图片链接 */
@@ -500,22 +511,20 @@ src="https://www.facebook.com/tr?id=1023268086807125&ev=PageView&noscript=1"
         }
 
         .footer-line {
-            height: 4px;
-            width: 100vw;
-            margin: 0 0 16px;
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(
-                    90deg,
-                    #ff9933 0%,
-                    #ff9933 33%,
-                    #ffffff 33%,
-                    #ffffff 66%,
-                    #138808 66%,
-                    #138808 100%
-            );
-        }
+    height: 4px;
+    width: 100vw;
+    margin: 0 0 16px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+        90deg,
+        #e70011 0%,
+        #e70011 50%,
+        #ffffff 50%,
+        #ffffff 100%
+    );
+}
         .download-info {
             font-size: 11px;
             color: #d0d0d0;
@@ -553,7 +562,7 @@ src="https://www.facebook.com/tr?id=1023268086807125&ev=PageView&noscript=1"
 
 <div class="hero-container">
     <section class="hero-card">
-        <div class="hero-tag"><span class="dot"></span>DRAMA INDONESIA · ROMANSA · FANTASI · GRATIS SELAMANYA</div>
+        <div class="hero-tag"><span class="dot"></span>DRAMA · ROMANSA · FANTASI · GRATIS</div>
         <h1 class="hero-title">
             JioStar Pro Indonesia — <span class="gold">Drama Romantis,</span><br>
             <span class="gold">Fantasi,</span> CEO & Balas Dendam<br>
